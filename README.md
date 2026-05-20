@@ -58,10 +58,3 @@ The `design/` folder is the canonical reference for tokens, components, and per-
 3. `design/PAGE_LAYOUTS.md`
 
 The HTML/JSX files under `design/source/` are interactive prototypes — read for intent, don't copy code from them. The actual implementation lives in `src/`.
-
-## Signature details (don't drift)
-
-- Background `#FFF8E7` (warm paper), foreground `#1A1626` (warm near-black). Never `#fff` / `#000`.
-- 2px ink borders are the visual signature.
-- Hover lift is **flat-offset**: `translate(-2,-2)` + `4px 4px 0 0 ink`. Never `0 4px 12px rgba(0,0,0,0.1)`.
-- House colors are paired with a contrast accent in front-matter. Text on a house's color MUST use that house's accent — never fall back to `--ink` (it'll fail contrast on Lightning's yellow).
