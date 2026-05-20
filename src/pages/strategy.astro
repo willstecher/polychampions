@@ -1,0 +1,10 @@
+---
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('pages', 'strategy-and-tactics');
+const { Content } = await render(entry!);
+---
+<ArticleLayout title="Strategy and Tactics" eyebrow="Get better">
+  <Content />
+</ArticleLayout>

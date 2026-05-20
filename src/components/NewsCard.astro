@@ -1,0 +1,80 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  excerpt: string;
+  date: Date;
+  tags?: string[];
+}
+const { href, title, excerpt, date, tags = [] } = Astro.props;
+const fmt = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+}).format(date).toUpperCase();
+---
+<a href={href} class="news-card">
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map((t) => <span class="tag">{t}</span>)}
+    </div>
+  )}
+  <h3 class="title">{title}</h3>
+  <p class="excerpt">{excerpt}</p>
+  <div class="meta">{fmt}</div>
+</a>
+
+<style>
+  .news-card {
+    display: block;
+    border: var(--border-strong);
+    border-radius: 10px;
+    background: var(--paper-2);
+    padding: 18px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: var(--float);
+  }
+  .news-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  .tags {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 7px;
+    border-radius: 3px;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--ink);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.01em;
+  }
+  .excerpt {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0 0 14px 0;
+  }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+  }
+</style>

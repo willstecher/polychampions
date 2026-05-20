@@ -1,0 +1,213 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import HexBg from '../components/HexBg.astro';
+import Button from '../components/Button.astro';
+import YouTubeEmbed from '../components/YouTubeEmbed.astro';
+import { social } from '../data/league';
+
+const steps = [
+  {
+    n: '01',
+    title: 'Join the PolyChampions Discord',
+    body:
+      'Open the Discord invite and accept the server rules. The Discord is where every match is scheduled and logged.',
+  },
+  {
+    n: '02',
+    title: 'Register with the PolyElo bot',
+    body:
+      'In the #bot-commands channel, run $setname YourPolytopiaName to link your in-game name to your Discord account.',
+  },
+  {
+    n: '03',
+    title: 'Open a Novas 2v2 with $open',
+    body:
+      'Use $open novas to put yourself in the queue for a 2v2 Novas game. The bot pairs you with another rookie and two opponents.',
+  },
+  {
+    n: '04',
+    title: 'Play the game inside the Polytopia app',
+    body:
+      'Coordinate moves with your teammate over Discord. Take screenshots each turn. Game settings: Might mode, 24-hour timer, large map.',
+  },
+  {
+    n: '05',
+    title: 'Log the result with $win or $loss',
+    body:
+      'When the game ends, both teams confirm the result through the bot. This updates your Elo and marks your Nova progress.',
+  },
+  {
+    n: '06',
+    title: 'Graduate and enter Free Agency',
+    body:
+      'After completing one 2v2 and starting a second, run $freeagent to enter the next auction. Houses bid using their FAT budget.',
+  },
+];
+---
+<BaseLayout title="Join a Team">
+  <section class="hero">
+    <HexBg
+      seed={9}
+      palette={['#FF6B35', '#F5C842', '#5BB7E5', '#7DC242', '#8B5BE5']}
+      count={70}
+      opacity={0.18}
+    />
+    <div class="container-mid hero-inner">
+      <Eyebrow class="on-dark">How to join</Eyebrow>
+      <h1 class="h1 hero-h1">The Novas: your first season.</h1>
+      <p class="hero-lead">
+        The Novas are the rookie team where every new player starts. To graduate
+        from the Novas and be eligible for a house, you need to complete one
+        2v2 game and start a second. Below is the path, top to bottom.
+      </p>
+    </div>
+  </section>
+
+  <section class="steps">
+    <div class="container-mid">
+      <Eyebrow>The Six Steps</Eyebrow>
+      <h2 class="h2">Step by step</h2>
+      <div class="step-list">
+        {steps.map((s) => (
+          <div class="step">
+            <div class="num">{s.n}</div>
+            <div>
+              <h3 class="title">{s.title}</h3>
+              <p class="body">{s.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="tutorial">
+    <div class="container-mid">
+      <Eyebrow>Bot tutorial</Eyebrow>
+      <h2 class="h2">How to use the PolyElo bot</h2>
+      <p class="tut-lead">
+        A walkthrough of the bot commands you'll use to register, open games,
+        join games, and log wins and losses.
+      </p>
+      <YouTubeEmbed id="_KsDd0LT54M" title="PolyElo bot tutorial" />
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="container-mid closing-inner">
+      <div>
+        <h2 class="closing-h2">Ready? Join the Discord.</h2>
+        <p class="closing-body">
+          That's where every recruit starts. We'll see you there.
+        </p>
+      </div>
+      <Button
+        href={social.discord}
+        variant="discord"
+        target="_blank"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.07.07 0 0 0-.074.034c-.211.375-.444.864-.608 1.249a18.348 18.348 0 0 0-5.495 0 12.643 12.643 0 0 0-.617-1.249.073.073 0 0 0-.074-.034 19.736 19.736 0 0 0-4.885 1.515.066.066 0 0 0-.03.027C.533 9.045-.32 13.579.099 18.057a.082.082 0 0 0 .031.057 19.91 19.91 0 0 0 5.993 3.029.077.077 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.105 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.128 12.298 12.298 0 0 1-1.873.891.077.077 0 0 0-.041.106c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.548-13.66a.06.06 0 0 0-.031-.028zM8.02 15.331c-1.182 0-2.156-1.085-2.156-2.418 0-1.334.955-2.419 2.156-2.419 1.21 0 2.175 1.094 2.156 2.419 0 1.333-.955 2.418-2.156 2.418zm7.974 0c-1.183 0-2.157-1.085-2.157-2.418 0-1.334.955-2.419 2.157-2.419 1.21 0 2.175 1.094 2.156 2.419 0 1.333-.946 2.418-2.156 2.418z"/>
+        </svg>
+        {social.discord.replace(/^https?:\/\//, '')}
+      </Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 70px 36px 50px;
+    border-bottom: var(--border-strong);
+  }
+  .hero-inner { position: relative; }
+  .hero-h1 {
+    font-size: 80px;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--paper);
+    margin: 14px 0 22px 0;
+  }
+  .hero-lead {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--paper);
+    opacity: 0.82;
+    max-width: 720px;
+    margin: 0;
+  }
+
+  .steps { padding: 60px 36px; border-bottom: var(--border-strong); }
+  .step-list {
+    margin-top: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    align-items: start;
+    padding: 18px 22px;
+    border: var(--border-strong);
+    background: var(--paper-2);
+    border-radius: var(--radius);
+    gap: 16px;
+  }
+  .num {
+    font-size: 44px;
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .title {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 4px 0 6px 0;
+  }
+  .body {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  .tutorial { padding: 60px 36px; border-bottom: var(--border-strong); background: var(--paper-2); }
+  .tut-lead {
+    margin: 14px 0 24px;
+    font-size: 17px;
+    color: var(--ink-2);
+  }
+
+  .closing {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 36px;
+    border-bottom: var(--border-strong);
+  }
+  .closing-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .closing-h2 {
+    font-size: 36px;
+    color: var(--paper);
+    margin: 0 0 6px 0;
+    letter-spacing: -0.02em;
+  }
+  .closing-body { color: var(--paper); opacity: 0.8; margin: 0; }
+
+  @media (max-width: 760px) {
+    .hero-h1 { font-size: 44px; }
+    .closing-h2 { font-size: 28px; }
+  }
+</style>

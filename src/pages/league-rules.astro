@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('pages', 'league-rules');
+const { Content, headings } = await render(entry!);
+
+const tocItems = headings.filter((h) => h.depth === 1);
+---
+<BaseLayout title="League Rules">
+  <section class="page-head">
+    <div class="container">
+      <Eyebrow>Official league rules</Eyebrow>
+      <h1 class="h1-page">League Rules</h1>
+      <p class="lead">
+        The full rulebook covering match format, tribes, rosters, free agency,
+        trades, and conduct. Cross-references to the PolyElo bot commands
+        throughout.
+      </p>
+    </div>
+  </section>
+
+  <section class="rules">
+    <div class="container rules-grid">
+      <aside class="toc" aria-label="Contents">
+        <span class="toc-eyebrow">Contents</span>
+        <nav>
+          <ul>
+            {tocItems.map((h) => (
+              <li><a href={`#${h.slug}`}>{h.text}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+
+      <article class="article">
+        <Content />
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head { padding: 56px 36px 20px; }
+  .h1-page {
+    font-size: var(--text-display-2);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 0 0 12px 0;
+  }
+  .rules { padding: 28px 36px 70px; }
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 90px;
+  }
+  .toc-eyebrow {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--brand);
+    margin-bottom: 10px;
+  }
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc li { margin: 0; }
+  .toc a {
+    display: block;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  .toc a:hover { border-left-color: var(--brand); color: var(--brand); background: var(--paper-2); }
+
+  .article :global(h1) {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 48px 0 12px;
+    padding-top: 28px;
+    border-top: var(--border-strong);
+    scroll-margin-top: 90px;
+  }
+  .article :global(h1:first-of-type) { padding-top: 0; border-top: 0; margin-top: 0; }
+  .article :global(h2) {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 32px 0 10px;
+    scroll-margin-top: 90px;
+  }
+  .article :global(h3) {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 24px 0 8px;
+    scroll-margin-top: 90px;
+  }
+  .article :global(p) {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    margin: 0 0 1em 0;
+  }
+  .article :global(ul), .article :global(ol) {
+    padding-left: 1.2em;
+    margin-bottom: 1em;
+  }
+  .article :global(li) {
+    margin-bottom: 0.5em;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .article :global(a) { color: var(--ink); border-bottom: 2px solid var(--ink); }
+  .article :global(strong) { font-weight: 700; color: var(--ink); }
+  .article :global(em) { font-style: italic; }
+  .article :global(code) {
+    font-family: var(--font-mono);
+    background: var(--paper-2);
+    border: var(--border-subtle);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.92em;
+  }
+
+  @media (max-width: 980px) {
+    .rules-grid { grid-template-columns: 1fr; }
+    .toc {
+      position: static;
+      padding-bottom: 20px;
+      border-bottom: var(--border-subtle);
+      margin-bottom: 24px;
+    }
+  }
+</style>

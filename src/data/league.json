@@ -1,0 +1,32 @@
+{
+  "season": {
+    "current": 22,
+    "label": "Season 22",
+    "since": "May 2018"
+  },
+  "social": {
+    "discord": "https://discord.gg/7AKFVrZfqb",
+    "youtube": "https://www.youtube.com/channel/UC9IStoy1QBIr4_iFTi3E6PA",
+    "merch": "https://polychampions-shop.fourthwall.com/",
+    "contact": "mailto:polychampions@gmail.com"
+  },
+  "houses": {
+    "order": [
+      "lightning",
+      "jets",
+      "wildfire",
+      "dragons",
+      "arctic-wolves",
+      "kraken",
+      "ronin",
+      "tempest",
+      "vikings",
+      "reapers",
+      "seers",
+      "roos",
+      "vengeance",
+      "yams",
+      "inner-favillae"
+    ]
+  }
+}

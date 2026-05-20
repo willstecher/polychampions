@@ -1,0 +1,56 @@
+---
+import HouseLogo from './HouseLogo.astro';
+
+interface Props {
+  slug: string;
+  name: string;
+  logo: string;
+  color: string;
+  accent: string;
+}
+const { slug, name, logo, color, accent } = Astro.props;
+---
+<a
+  class="house-card"
+  href={`/teams/${slug}/`}
+  style={`--house-color:${color};--house-accent:${accent}`}
+>
+  <div class="logo-wrap">
+    <HouseLogo logo={logo} name={name} size={42} frame={false} />
+  </div>
+  <div class="name">{name}</div>
+</a>
+
+<style>
+  .house-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-decoration: none;
+    background: var(--house-color);
+    border: var(--border-strong);
+    border-radius: var(--radius-lg);
+    padding: 22px 16px 18px;
+    text-align: center;
+    transition: var(--float);
+  }
+  .house-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  .logo-wrap {
+    width: 84px;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--house-accent);
+  }
+</style>

@@ -1,0 +1,191 @@
+:root {
+  /* Colors */
+  --paper:     #FFF8E7;
+  --paper-2:   #FFFDF4;
+  --ink:       #1A1626;
+  --ink-2:     #4A4458;
+  --ink-3:     #7A7488;
+  --line:      #E8DFC4;
+
+  --brand:     #FF6B35;
+  --brand-dk:  #D9421F;
+  --discord:   #5865F2;
+  --good:      #3DA859;
+  --warn:      #E84A2D;
+
+  /* Type */
+  --font-sans:  'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* Type scale */
+  --text-display-1: 84px;
+  --text-display-2: 60px;
+  --text-h2:        44px;
+  --text-h3:        30px;
+  --text-h4:        22px;
+  --text-body-l:    20px;
+  --text-body:      16px;
+  --text-meta:      13px;
+  --text-mono-sm:   11px;
+  --text-mono-xs:   10px;
+
+  /* Borders */
+  --border-strong: 2px solid var(--ink);
+  --border-subtle: 1px solid var(--line);
+
+  /* Radii */
+  --radius-sm:   4px;
+  --radius:      8px;
+  --radius-lg:   12px;
+  --radius-pill: 999px;
+
+  /* Spacing */
+  --pad-card-sm: 16px;
+  --pad-card:    20px;
+  --pad-card-lg: 28px;
+  --pad-section: 56px 36px;
+  --pad-hero:    70px 36px;
+
+  /* Containers */
+  --container-narrow: 720px;
+  --container:        900px;
+  --container-wide:   1180px;
+
+  /* Motion */
+  --tap:    transform .12s, box-shadow .12s;
+  --float:  transform .15s, box-shadow .15s;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --text-display-1: 48px;
+    --text-display-2: 38px;
+    --text-h2:        30px;
+    --text-h3:        24px;
+    --pad-section:    40px 20px;
+    --pad-hero:       48px 20px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+p {
+  text-wrap: pretty;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0 0 1em 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h2 { text-wrap: pretty; }
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin: 0 0 8px 0;
+  display: block;
+}
+
+.eyebrow.on-dark { color: var(--brand); opacity: 0.95; }
+
+.container {
+  max-width: var(--container-wide);
+  margin: 0 auto;
+}
+
+.container-narrow {
+  max-width: var(--container-narrow);
+  margin: 0 auto;
+}
+
+.container-mid {
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.section {
+  padding: var(--pad-section);
+  border-bottom: var(--border-strong);
+}
+
+.section-hero {
+  padding: var(--pad-hero);
+  border-bottom: var(--border-strong);
+}
+
+.h1 { font-size: var(--text-display-1); font-weight: 800; letter-spacing: -0.04em; line-height: 0.92; }
+.h1-page { font-size: var(--text-display-2); font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.h2 { font-size: var(--text-h2); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; }
+.h3 { font-size: var(--text-h3); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.h4 { font-size: var(--text-h4); font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+
+.lead { font-size: var(--text-body-l); line-height: 1.5; color: var(--ink-2); }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  z-index: 100;
+}
+.skip-link:focus-visible {
+  left: 12px;
+  top: 12px;
+}
+
+@media (max-width: 768px) {
+  .section, .section-hero { padding: 36px 20px; }
+}

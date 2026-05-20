@@ -1,0 +1,331 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import HouseCard from '../components/HouseCard.astro';
+import Stat from '../components/Stat.astro';
+import HexBg from '../components/HexBg.astro';
+import YouTubeEmbed from '../components/YouTubeEmbed.astro';
+import { getCollection } from 'astro:content';
+import { houseOrder, season, social } from '../data/league';
+
+const houses = await getCollection('houses');
+const ordered = houseOrder
+  .map((id) => houses.find((h) => h.data.id === id))
+  .filter((h): h is (typeof houses)[number] => Boolean(h));
+---
+<BaseLayout title="PolyChampions">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <span class="season-pill">{season.label.toUpperCase()}</span>
+      <h1 class="hero-h1">
+        The competitive league for <span class="hl">The Battle</span> of Polytopia.
+      </h1>
+      <div class="hero-row">
+        <p class="hero-lead">
+          Fifteen houses. Twenty-five-plus teams. Matches coordinated through
+          Discord. Promotion, relegation, free-agent auctions, and a full
+          rulebook keep things competitive.
+        </p>
+        <div class="hero-cta">
+          <Button href="/join" variant="primary">Join the league →</Button>
+          <Button href="/teams" variant="secondary">See the houses</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How the League Works -->
+  <section class="section how">
+    <div class="container how-grid">
+      <div>
+        <Eyebrow>How it works</Eyebrow>
+        <h2 class="h2">12 games. One season. Three months.</h2>
+      </div>
+      <div class="how-body">
+        <p>
+          Each team plays one 2v2 and one 3v3 against every other team in its
+          division. Teammates share screenshots, coordinate moves, and play out
+          full Polytopia matches over the course of weeks. Top teams in each
+          division get <strong class="ok">promoted</strong>; bottom teams get
+          <strong class="bad">relegated</strong>. All matches are assigned and
+          logged through the PolyElo bot in Discord.
+        </p>
+        <p>
+          Seasons last roughly three months. A typical roster runs five to twenty
+          members; most players take on one to three season games. Outside the
+          season, houses run training games, in-house tournaments, and coaching.
+        </p>
+        <div class="how-stats">
+          <Stat value="2v2" label="Two on two" />
+          <Stat value="3v3" label="Three on three" />
+          <Stat value="12" label="Games per season" />
+          <Stat value="3 mo" label="Season length" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 Houses -->
+  <section class="section houses">
+    <div class="container">
+      <div class="houses-head">
+        <div>
+          <Eyebrow>The houses</Eyebrow>
+          <h2 class="h2">Fifteen Houses</h2>
+        </div>
+        <a class="all-link" href="/teams">All teams →</a>
+      </div>
+      <div class="houses-grid">
+        {ordered.map((h) => (
+          <HouseCard
+            slug={h.data.id}
+            name={h.data.name}
+            logo={h.data.logo}
+            color={h.data.color}
+            accent={h.data.accent}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- YouTube -->
+  <section class="section yt-section">
+    <div class="container yt-grid">
+      <div>
+        <Eyebrow>YouTube</Eyebrow>
+        <h2 class="h2">Strategy guides, game reviews, and other fun videos.</h2>
+        <p class="yt-body">
+          The PolyChampions channel publishes strategy guides, game reviews, and
+          livestreams featuring guests from the broader Polytopia community.
+          Subscribe to keep up between seasons.
+        </p>
+        <a
+          class="yt-link"
+          href={social.youtube}
+          target="_blank"
+          rel="noopener"
+        >
+          Subscribe on YouTube <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <YouTubeEmbed id="c6SqDIYaAcU" title="PolyChampions featured video" />
+    </div>
+  </section>
+
+  <!-- History CTA -->
+  <section class="cta-history">
+    <HexBg
+      seed={42}
+      palette={[ '#FF6B35', '#F5C842', '#5BB7E5', '#7DC242' ]}
+      count={70}
+      opacity={0.12}
+    />
+    <div class="container cta-grid">
+      <div>
+        <Eyebrow class="on-dark">Since 2018</Eyebrow>
+        <h2 class="cta-h2">From 4 colors to 25+ teams.</h2>
+        <p class="cta-body">
+          The league started as four color groups inside a tiny Discord server.
+          Twenty-one seasons later, we've added rosters, free agency, divisions,
+          promotion and relegation, and a community that runs everything from
+          training games to livestreams.
+        </p>
+      </div>
+      <div class="cta-buttons">
+        <Button href="/history" variant="brand">Read the league history →</Button>
+        <Button href="/hall-of-champions" variant="paper">Hall of Champions</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 64px 36px 60px;
+    border-bottom: var(--border-strong);
+  }
+  .season-pill {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    margin-bottom: 22px;
+  }
+  .hero-h1 {
+    font-size: var(--text-display-1);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    margin: 0 0 36px 0;
+    max-width: 1100px;
+  }
+  .hl {
+    background: var(--brand);
+    color: var(--paper);
+    padding: 0 12px;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+  }
+  .hero-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 48px;
+    align-items: end;
+  }
+  .hero-lead {
+    font-size: var(--text-body-l);
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 640px;
+    margin: 0;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .stat-strip-wrap { margin-top: 60px; }
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: var(--border-strong);
+    border-radius: 10px;
+    background: var(--paper-2);
+  }
+  .stat-strip > :global(.stat) {
+    border-right: var(--border-strong);
+  }
+  .stat-strip > :global(.stat:last-child) {
+    border-right: 0;
+  }
+
+  /* How */
+  .how { background: var(--paper-2); padding: 60px 36px; }
+  .how-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; }
+  .how-body p { font-size: 17px; line-height: 1.6; color: var(--ink-2); }
+  .how-body strong { font-weight: 700; }
+  .how-body .ok  { color: var(--good); }
+  .how-body .bad { color: var(--warn); }
+  .how-stats {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: var(--border-strong);
+    border-radius: 10px;
+    background: var(--paper);
+  }
+  .how-stats > :global(.stat) {
+    border-right: var(--border-strong);
+  }
+  .how-stats > :global(.stat:last-child) { border-right: 0; }
+
+  /* Houses */
+  .houses-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 32px;
+    gap: 16px;
+  }
+  .all-link {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 1px;
+  }
+  .all-link:hover { color: var(--brand); border-color: var(--brand); }
+  .houses-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  /* YouTube */
+  .yt-section { background: var(--paper-2); }
+  .yt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .yt-body { font-size: 17px; line-height: 1.55; color: var(--ink-2); margin-top: 14px; }
+  .yt-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .yt-link:hover { color: var(--brand); border-color: var(--brand); }
+
+  /* History CTA */
+  .cta-history {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 70px 36px;
+    border-bottom: var(--border-strong);
+  }
+  .cta-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .cta-h2 {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--paper);
+    line-height: 1.02;
+    margin: 6px 0 18px 0;
+  }
+  .cta-body {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--paper);
+    opacity: 0.8;
+    max-width: 580px;
+  }
+  .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  @media (max-width: 1080px) {
+    .how-grid, .yt-grid, .cta-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .hero-row {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .hero-cta { justify-content: flex-start; }
+    .houses-grid { grid-template-columns: repeat(2, 1fr); }
+    .how-stats { grid-template-columns: repeat(2, 1fr); }
+    .how-stats > :global(.stat:nth-child(2)) { border-right: 0; }
+    .how-stats > :global(.stat:nth-child(-n+2)) {
+      border-bottom: var(--border-strong);
+    }
+    .cta-h2 { font-size: 40px; }
+  }
+  @media (max-width: 560px) {
+    .houses-grid { grid-template-columns: 1fr; }
+  }
+</style>

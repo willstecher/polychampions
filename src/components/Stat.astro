@@ -1,0 +1,34 @@
+---
+interface Props {
+  value: string;
+  label: string;
+}
+const { value, label } = Astro.props;
+---
+<div class="stat">
+  <div class="value">{value}</div>
+  <div class="label">{label}</div>
+</div>
+
+<style>
+  .stat {
+    padding: 22px 26px;
+  }
+  .value {
+    font-family: var(--font-sans);
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .label {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+</style>

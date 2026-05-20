@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import Button from '../components/Button.astro';
+import HexBg from '../components/HexBg.astro';
+import { social } from '../data/league';
+---
+<BaseLayout title="Off the map" description="Page not found.">
+  <section class="not-found">
+    <HexBg
+      seed={404}
+      palette={['#F5C842', '#5BB7E5', '#7DC242', '#FF6B35']}
+      count={50}
+      opacity={0.22}
+    />
+    <div class="container-narrow inner">
+      <Eyebrow>Page not found</Eyebrow>
+      <h1 class="h1">Off the map.</h1>
+      <p class="lead">
+        That URL doesn't lead anywhere on PolyChampions. Try the teams page, or
+        jump into Discord and ask.
+      </p>
+      <div class="cta">
+        <Button href="/teams" variant="primary">Browse the teams</Button>
+        <Button
+          href={social.discord}
+          variant="discord"
+          target="_blank"
+        >
+          Join Discord
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    overflow: hidden;
+    padding: 80px 36px 100px;
+  }
+  .inner { position: relative; }
+  .h1 {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    margin: 14px 0 22px 0;
+  }
+  .lead {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin-bottom: 28px;
+    max-width: 540px;
+  }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  @media (max-width: 720px) {
+    .h1 { font-size: 48px; }
+  }
+</style>

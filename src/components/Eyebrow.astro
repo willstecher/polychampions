@@ -1,0 +1,9 @@
+---
+interface Props {
+  color?: string;
+  class?: string;
+}
+const { color, class: cls } = Astro.props;
+const style = color ? `color:${color}` : undefined;
+---
+<span class:list={["eyebrow", cls]} style={style}><slot /></span>

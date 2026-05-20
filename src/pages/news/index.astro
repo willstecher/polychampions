@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import HexBg from '../../components/HexBg.astro';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('news');
+const sorted = all.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const featured = sorted[0];
+const rest = sorted.slice(1);
+
+function excerpt(body: string): string {
+  const stripped = body
+    .replace(/!\[[^\]]*]\([^)]+\)/g, '')
+    .replace(/\[([^\]]+)]\([^)]+\)/g, '$1')
+    .replace(/[#*`>_]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return stripped.length > 200 ? stripped.slice(0, 200).trimEnd() + '…' : stripped;
+}
+
+const fmtDate = (d: Date) =>
+  new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(d);
+---
+<BaseLayout title="News">
+  <section class="page-head">
+    <div class="container">
+      <Eyebrow>News</Eyebrow>
+      <h1 class="h1-page">The Field Report</h1>
+    </div>
+  </section>
+
+  {featured && (
+    <section class="featured-wrap">
+      <div class="container">
+        <a class="featured" href={`/news/${featured.id}/`}>
+          <div class="copy">
+            <div class="tags">
+              <span class="tag">FEATURED</span>
+              <span class="tag">{fmtDate(featured.data.date).toUpperCase()}</span>
+            </div>
+            <h2 class="ft-title">{featured.data.title}</h2>
+            <p class="ft-excerpt">{excerpt(featured.body)}</p>
+            <div class="meta">{fmtDate(featured.data.date)} · {featured.data.author}</div>
+          </div>
+          <div class="art">
+            <HexBg
+              seed={featured.id.length}
+              palette={['#FFF8E7', '#FFFDF4']}
+              count={50}
+              opacity={0.55}
+            />
+          </div>
+        </a>
+      </div>
+    </section>
+  )}
+
+  <section class="archive">
+    <div class="container">
+      <div class="grid">
+        {rest.map((n) => (
+          <NewsCard
+            href={`/news/${n.id}/`}
+            title={n.data.title}
+            excerpt={excerpt(n.body)}
+            date={n.data.date}
+            tags={[]}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head { padding: 56px 36px 20px; }
+  .h1-page {
+    font-size: var(--text-display-2);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .featured-wrap { padding: 20px 36px 36px; }
+  .featured {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    background: var(--paper-2);
+    border: var(--border-strong);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    gap: 30px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: var(--float);
+    align-items: center;
+  }
+  .featured:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  .tags {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .ft-title {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px 0;
+    color: var(--ink);
+  }
+  .ft-excerpt {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0 0 14px 0;
+  }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .art {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 11;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--brand), #F5C842);
+    border: var(--border-strong);
+  }
+
+  .archive { padding: 16px 36px 70px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 1080px) {
+    .featured { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>

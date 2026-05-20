@@ -1,0 +1,67 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'discord' | 'brand' | 'paper';
+  target?: string;
+  rel?: string;
+  class?: string;
+  type?: 'button' | 'submit';
+}
+const {
+  href,
+  variant = 'primary',
+  target,
+  rel,
+  class: cls,
+  type = 'button',
+} = Astro.props;
+const Tag = href ? 'a' : 'button';
+const computedRel = target === '_blank' ? (rel ?? 'noopener') : rel;
+---
+<Tag
+  href={href}
+  target={target}
+  rel={computedRel}
+  type={!href ? type : undefined}
+  class:list={["btn", `btn-${variant}`, cls]}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: var(--border-strong);
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: var(--tap);
+    background: transparent;
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1;
+  }
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 0 var(--ink);
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-secondary { background: transparent; color: var(--ink); }
+  .btn-brand { background: var(--brand); color: var(--paper); border-color: var(--ink); }
+  .btn-paper { background: transparent; color: var(--paper); border-color: var(--paper); }
+  .btn-paper:hover { box-shadow: 4px 4px 0 0 var(--paper); }
+  .btn-discord {
+    background: var(--discord);
+    border-color: var(--discord);
+    color: #fff;
+  }
+  .btn-discord:hover {
+    box-shadow: 4px 4px 0 0 var(--ink);
+  }
+</style>

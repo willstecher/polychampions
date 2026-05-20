@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = await getCollection('news');
+  return all.map((n) => ({ params: { slug: n.id }, props: { post: n } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+}).format(post.data.date);
+---
+<BaseLayout title={post.data.title}>
+  <article class="article">
+    <div class="container-narrow">
+      <a href="/news" class="back">← All news</a>
+      <h1 class="title">{post.data.title}</h1>
+      <div class="meta">{fmt.toUpperCase()} · {post.data.author.toUpperCase()}</div>
+      <hr class="rule" />
+      <div class="body">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article { padding: 48px 36px 70px; }
+  .back {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--ink-2);
+    margin-bottom: 24px;
+  }
+  .back:hover { color: var(--brand); border-color: var(--brand); }
+  .title {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0 0 14px 0;
+  }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+  }
+  .rule {
+    border: 0;
+    border-top: var(--border-strong);
+    margin: 28px 0;
+  }
+  .body :global(p) {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 0 1.2em 0;
+  }
+  .body :global(h2) {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 36px 0 14px;
+  }
+  .body :global(blockquote) {
+    background: var(--paper-2);
+    border: var(--border-strong);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-style: italic;
+    margin: 24px 0;
+  }
+  .body :global(img) {
+    border: var(--border-strong);
+    border-radius: var(--radius);
+    margin: 16px 0;
+  }
+  .body :global(a) {
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .body :global(a:hover) { color: var(--brand); border-color: var(--brand); }
+  .body :global(strong) { font-weight: 700; }
+  .body :global(ul), .body :global(ol) { padding-left: 1.2em; }
+  .body :global(li) { margin-bottom: 0.4em; line-height: 1.65; }
+
+  @media (max-width: 720px) {
+    .title { font-size: 32px; }
+  }
+</style>

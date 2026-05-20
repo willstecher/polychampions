@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import HouseLogo from '../../components/HouseLogo.astro';
+import { getCollection } from 'astro:content';
+import { houseOrder } from '../../data/league';
+
+const houses = await getCollection('houses');
+const ordered = houseOrder
+  .map((id) => houses.find((h) => h.data.id === id))
+  .filter((h): h is (typeof houses)[number] => Boolean(h));
+---
+<BaseLayout title="Teams">
+  <section class="page-head">
+    <div class="container">
+      <Eyebrow>The league</Eyebrow>
+      <h1 class="h1-page">
+        The PolyChampions League has fifteen Houses, each hosting multiple teams.
+      </h1>
+    </div>
+  </section>
+
+  <section class="bios">
+    <div class="container">
+      <div class="rows">
+        {ordered.map((h, i) => {
+          const logoLeft = i % 2 === 0;
+          return (
+            <a
+              class="row"
+              href={`/teams/${h.data.id}/`}
+              style={`--house-color:${h.data.color};--house-accent:${h.data.accent};flex-direction:${logoLeft ? 'row' : 'row-reverse'}`}
+            >
+              <div class="logo-side">
+                <HouseLogo
+                  logo={h.data.logo}
+                  name={h.data.name}
+                  color={h.data.color}
+                  size={56}
+                  frame={true}
+                />
+              </div>
+              <div class="copy">
+                <h2 class="name">{h.data.name}</h2>
+                {h.data.motto && <p class="motto">“{h.data.motto}”</p>}
+                <p class="bio">{h.body.trim()}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <div class="footer-note">
+        Read the step-by-step instructions on
+        <a href="/join">how to get on a team</a>.
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head { padding: 56px 36px 28px; }
+  .h1-page {
+    font-size: var(--text-display-2);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    max-width: 900px;
+  }
+  .bios { padding: 28px 36px 70px; }
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 24px 28px;
+    background: var(--house-color);
+    border: var(--border-strong);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--house-accent);
+    transition: var(--float);
+  }
+  .row:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  .logo-side {
+    flex-shrink: 0;
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--house-accent);
+    margin: 0 0 4px 0;
+  }
+  .motto {
+    font-style: italic;
+    font-size: 16px;
+    color: var(--house-accent);
+    opacity: 0.9;
+    margin: 0 0 8px 0;
+  }
+  .bio {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--house-accent);
+    opacity: 0.92;
+    margin: 0;
+  }
+  .footer-note {
+    margin-top: 28px;
+    padding: 18px 22px;
+    background: var(--paper-2);
+    border: var(--border-strong);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .footer-note a {
+    font-weight: 700;
+    border-bottom: 2px solid var(--ink);
+  }
+  .footer-note a:hover { color: var(--brand); border-color: var(--brand); }
+
+  @media (max-width: 760px) {
+    .row { flex-direction: column !important; align-items: flex-start; gap: 16px; }
+    .name { font-size: 28px; }
+  }
+</style>

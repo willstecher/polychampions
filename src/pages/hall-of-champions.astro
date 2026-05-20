@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import HouseLogo from '../components/HouseLogo.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const entry = await getEntry('pages', 'hall-of-champions');
+const houses = await getCollection('houses');
+const findHouse = (name: string) =>
+  houses.find((h) => h.data.name.toLowerCase() === name.toLowerCase());
+
+// Parse the markdown body: each `## Season N` followed by a paragraph.
+const raw = entry?.body ?? '';
+const blocks = raw.split(/\n(?=## Season )/);
+type Champ = {
+  season: string;
+  winnerName: string;
+  detail: string;
+};
+const champions: Champ[] = [];
+for (const b of blocks) {
+  const head = b.match(/^##\s+(Season\s+\d+)\n([\s\S]*)$/);
+  if (!head) continue;
+  const season = head[1];
+  const after = head[2]
+    .replace(/!\[[^\]]*]\([^)]*\)/g, '')
+    .replace(/\[([^\]]+)]\([^)]+\)/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const winnerMatch = after.match(/(Wildfire|Crawfish|Sparkies|Lightning|Jets|Ronin|Dragons)/);
+  const winnerName = winnerMatch?.[1] ?? '';
+  champions.push({ season, winnerName, detail: after });
+}
+
+const fallbackPaper = {
+  color: '#FFFDF4',
+  accent: '#1A1626',
+  logo: '/houses/novas.png',
+};
+---
+<BaseLayout title="Hall of Champions">
+  <section class="page-head">
+    <div class="container-mid">
+      <Eyebrow>Since Season 1</Eyebrow>
+      <h1 class="h1-page">Hall of Champions</h1>
+      <p class="lead">
+        Season-by-season champions of the PolyChampions league. The historical
+        record currently covers Seasons 1–8; backfilling is in progress.
+      </p>
+    </div>
+  </section>
+
+  <section class="grid-wrap">
+    <div class="container-mid">
+      <div class="grid">
+        {champions.map((c) => {
+          const h = c.winnerName ? findHouse(c.winnerName) : undefined;
+          const color = h?.data.color ?? fallbackPaper.color;
+          const accent = h?.data.accent ?? fallbackPaper.accent;
+          return (
+            <div
+              class="card"
+              style={`background:${color};color:${accent};--c-color:${color};--c-accent:${accent}`}
+            >
+              <div class="left">
+                <span class="season-eyebrow">SEASON</span>
+                <div class="season-num">{c.season.replace('Season ', '')}</div>
+              </div>
+              <div class="middle">
+                <div class="winner">{c.winnerName || '—'}</div>
+                <div class="detail">{c.detail}</div>
+              </div>
+              <div class="right">
+                {h && (
+                  <HouseLogo
+                    logo={h.data.logo}
+                    name={h.data.name}
+                    size={40}
+                    frame={false}
+                  />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head { padding: 56px 36px 20px; }
+  .h1-page {
+    font-size: var(--text-display-2);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 0 0 14px 0;
+  }
+  .grid-wrap { padding: 24px 36px 70px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .card {
+    display: grid;
+    grid-template-columns: 90px 1fr 100px;
+    align-items: center;
+    gap: 16px;
+    border: var(--border-strong);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .season-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    opacity: 0.85;
+  }
+  .season-num {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--c-accent);
+    margin-top: 4px;
+  }
+  .winner {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--c-accent);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .detail {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--c-accent);
+    opacity: 0.88;
+  }
+  .right { display: flex; justify-content: flex-end; }
+  .right :global(.house-logo) { width: 80px !important; height: 80px !important; }
+
+  @media (max-width: 880px) {
+    .grid { grid-template-columns: 1fr; }
+    .card { grid-template-columns: 70px 1fr 60px; }
+    .right :global(.house-logo) { width: 56px !important; height: 56px !important; }
+    .season-num { font-size: 34px; }
+  }
+</style>

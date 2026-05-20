@@ -1,0 +1,72 @@
+---
+interface Props {
+  seed?: number;
+  palette: string[];
+  count?: number;
+  opacity?: number;
+  size?: number;
+  class?: string;
+}
+const {
+  seed = 1,
+  palette,
+  count = 60,
+  opacity = 0.25,
+  size = 36,
+  class: cls,
+} = Astro.props;
+
+function lowPolyHexes(s0: number, pal: string[], n: number) {
+  let s = s0 || 1;
+  const rand = () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+  const tiles: Array<[number, number, string]> = [];
+  for (let i = 0; i < n; i++) {
+    tiles.push([
+      Math.floor(rand() * 28),
+      Math.floor(rand() * 18),
+      pal[Math.floor(rand() * pal.length)],
+    ]);
+  }
+  return tiles;
+}
+
+function hexPath(s: number) {
+  const pts: number[][] = [];
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 3) * i - Math.PI / 2;
+    pts.push([s * Math.cos(a), s * Math.sin(a)]);
+  }
+  return 'M' + pts.map((p) => p.map((n) => n.toFixed(2)).join(',')).join('L') + 'Z';
+}
+
+const w = size * Math.sqrt(3);
+const h = size * 1.5;
+const tiles = lowPolyHexes(seed, palette, count);
+const d = hexPath(size);
+---
+<svg
+  class:list={["hex-bg", cls]}
+  aria-hidden="true"
+  preserveAspectRatio="xMidYMid slice"
+  viewBox="0 0 1280 720"
+  style={`opacity:${opacity}`}
+>
+  {tiles.map(([col, row, fill]) => {
+    const x = col * w + (row % 2 === 1 ? w / 2 : 0);
+    const y = row * h;
+    return <path d={d} fill={fill} transform={`translate(${x.toFixed(2)},${y.toFixed(2)})`} />;
+  })}
+</svg>
+
+<style>
+  .hex-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>

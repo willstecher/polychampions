@@ -1,0 +1,55 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+}
+const { title, eyebrow, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <section class="page-head">
+    <div class="container-narrow">
+      {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+      <h1 class="h1-page">{title}</h1>
+    </div>
+  </section>
+
+  <section class="body-section">
+    <div class="container-narrow">
+      <div class="prose">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head { padding: 56px 36px 20px; }
+  .h1-page {
+    font-size: var(--text-display-2);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .body-section { padding: 28px 36px 70px; }
+  .prose :global(p) {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    margin: 0 0 1em 0;
+  }
+  .prose :global(h2) {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 32px 0 12px;
+  }
+  .prose :global(ul) { padding-left: 1.2em; margin-bottom: 1em; }
+  .prose :global(li) { margin-bottom: 0.4em; color: var(--ink-2); line-height: 1.65; }
+  .prose :global(a) { color: var(--ink); border-bottom: 2px solid var(--ink); }
+  .prose :global(a:hover) { color: var(--brand); border-color: var(--brand); }
+  .prose :global(strong) { font-weight: 700; color: var(--ink); }
+</style>

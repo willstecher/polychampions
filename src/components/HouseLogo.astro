@@ -1,0 +1,82 @@
+---
+interface Props {
+  logo: string;
+  name: string;
+  color?: string;
+  size?: number;
+  frame?: boolean;
+  bordered?: boolean;
+  class?: string;
+}
+const {
+  logo,
+  name,
+  color = '#FFF8E7',
+  size = 64,
+  frame = true,
+  bordered = false,
+  class: cls,
+} = Astro.props;
+
+const hexPoints = (s: number) => {
+  const pts = [] as string[];
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 3) * i - Math.PI / 2;
+    const x = s + s * Math.cos(a);
+    const y = s + s * Math.sin(a);
+    pts.push(`${x.toFixed(2)},${y.toFixed(2)}`);
+  }
+  return pts.join(' ');
+};
+
+const points = hexPoints(size);
+const inset = Math.round(size * 0.36);
+---
+<div class:list={["house-logo", { framed: frame, bordered }, cls]} style={`width:${size * 2}px;height:${size * 2}px;--hl-color:${color}`}>
+  {frame && (
+    <svg width={size * 2} height={size * 2} viewBox={`0 0 ${size * 2} ${size * 2}`} aria-hidden="true" class="frame">
+      <polygon points={points} fill={color} {...(bordered ? { stroke: 'var(--ink)', 'stroke-width': '4' } : {})} />
+    </svg>
+  )}
+  <img
+    src={logo}
+    alt={`${name} logo`}
+    loading="lazy"
+    decoding="async"
+    style={`inset:${inset}px`}
+  />
+</div>
+
+<style>
+  .house-logo {
+    position: relative;
+    display: inline-block;
+  }
+  .frame {
+    position: absolute;
+    inset: 0;
+  }
+  img {
+    position: absolute;
+    object-fit: contain;
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 2 * var(--inset, 0px));
+    max-height: calc(100% - 2 * var(--inset, 0px));
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+  }
+  .house-logo img {
+    width: calc(100% - 36%);
+    height: calc(100% - 36%);
+    inset: 18%;
+    left: 18%;
+    top: 18%;
+  }
+  .house-logo:not(.framed) img {
+    position: static;
+    inset: auto;
+    width: 100%;
+    height: 100%;
+    filter: none;
+  }
+</style>

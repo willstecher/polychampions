@@ -1,0 +1,93 @@
+---
+import { season, social } from '../data/league';
+
+const links = [
+  { href: social.youtube, label: 'YouTube', external: true },
+  { href: social.discord, label: 'Discord', external: true },
+  { href: social.contact, label: 'Contact', external: false },
+  { href: social.merch,   label: 'Merch',   external: true },
+];
+---
+<footer class="site-footer">
+  <div class="inner">
+    <a href="/" class="brand">
+      <img
+        src="/logo.png"
+        alt=""
+        width="32"
+        height="32"
+        class="brand-logo"
+        decoding="async"
+      />
+      <span class="wordmark">PolyChampions</span>
+    </a>
+    <nav class="links" aria-label="Footer">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          target={l.external ? '_blank' : undefined}
+          rel={l.external ? 'noopener' : undefined}
+          class="link"
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+    <span class="copyright">© Season {season.current} · PolyChampions</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 36px;
+  }
+  .inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--paper);
+  }
+  .brand-logo {
+    display: block;
+    width: 32px;
+    height: 32px;
+  }
+  .wordmark {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .links {
+    display: flex;
+    gap: 22px;
+    flex: 1;
+    margin-left: 8px;
+  }
+  .link {
+    color: var(--paper);
+    opacity: 0.8;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+    transition: opacity .12s;
+  }
+  .link:hover { opacity: 1; }
+  .copyright {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HouseLogo from '../../components/HouseLogo.astro';
+import HexBg from '../../components/HexBg.astro';
+import Button from '../../components/Button.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const houses = await getCollection('houses');
+  return houses.map((h) => ({ params: { slug: h.data.id }, props: { house: h } }));
+}
+
+const { house } = Astro.props;
+const { Content } = await render(house);
+const seed = house.data.id.charCodeAt(0) * 7 + house.data.id.length;
+---
+<BaseLayout title={house.data.name}>
+  <section
+    class="banner"
+    style={`background:${house.data.color};color:${house.data.accent};--house-color:${house.data.color};--house-accent:${house.data.accent}`}
+  >
+    <HexBg
+      seed={seed}
+      palette={[house.data.accent, house.data.color, '#FFF8E7']}
+      count={70}
+      opacity={0.22}
+    />
+    <div class="container banner-inner">
+      <div class="logo-frame">
+        <HouseLogo
+          logo={house.data.logo}
+          name={house.data.name}
+          color="#FFF8E7"
+          size={70}
+          frame={true}
+          bordered={true}
+        />
+      </div>
+      <div>
+        <span class="eyebrow-house">House</span>
+        <h1 class="banner-h1">{house.data.name}</h1>
+        {house.data.motto && <p class="motto">“{house.data.motto}”</p>}
+      </div>
+    </div>
+  </section>
+
+  <section class="bio">
+    <div class="container-mid">
+      <div class="bio-body">
+        <Content />
+      </div>
+
+      <div class="join-card">
+        <div>
+          <h2 class="join-h2">Want to join {house.data.name}?</h2>
+          <p>
+            New players join through the Novas — the league's rookie team.
+            Pass probation, then bid in the auction.
+          </p>
+        </div>
+        <Button href="/join" variant="primary">How to join →</Button>
+      </div>
+
+      <a href="/teams" class="back-link">← Back to all teams</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .banner {
+    position: relative;
+    overflow: hidden;
+    padding: 56px 36px 44px;
+    border-bottom: var(--border-strong);
+  }
+  .banner-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .logo-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .eyebrow-house {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--house-accent);
+    opacity: 0.85;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  .banner-h1 {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--house-accent);
+    margin: 0;
+  }
+  .motto {
+    font-size: 22px;
+    font-style: italic;
+    color: var(--house-accent);
+    opacity: 0.85;
+    margin: 14px 0 0 0;
+  }
+
+  .bio { padding: 48px 36px 70px; }
+  .bio-body {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .bio-body :global(p) { color: var(--ink); font-size: 20px; line-height: 1.55; margin: 0 0 1em 0; }
+  .bio-body :global(h2) {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 36px 0 12px;
+  }
+
+  .join-card {
+    margin-top: 40px;
+    padding: 24px;
+    border: var(--border-strong);
+    background: var(--paper-2);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .join-h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.01em;
+  }
+  .join-card p { margin: 0; color: var(--ink-2); }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 28px;
+    font-weight: 600;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--ink-2);
+    font-size: 13px;
+  }
+  .back-link:hover { color: var(--brand); border-color: var(--brand); }
+
+  @media (max-width: 760px) {
+    .banner-inner { grid-template-columns: 1fr; gap: 16px; }
+    .banner-h1 { font-size: 52px; }
+  }
+</style>
